@@ -15,19 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\dstring\dstring\dstring.c">
+    <ClCompile Include="Lab2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dstring\dstring\dstring_test.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lab1_2.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\dstring\dstring\dstring.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

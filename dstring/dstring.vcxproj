@@ -20,11 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{48F64858-311F-45BC-9D6C-B913874BD86F}</ProjectGuid>
+    <ProjectGuid>{933AEB67-BC85-4C9A-8EA2-2A580E58A7CC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>DVA104Labbar</RootNamespace>
+    <RootNamespace>dstring</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-    <ProjectName>Lab1</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -154,7 +153,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\dstring\dstring\dstring.c" />
     <ClCompile Include="..\..\dstring\dstring\dstring_test.c" />
-    <ClCompile Include="lab1_2.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dstring\dstring\dstring.h" />
