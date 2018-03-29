@@ -152,12 +152,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\dstring\dstring\dstring.c" />
-    <ClCompile Include="..\..\dstring\dstring\dstring_test.c" />
+    <ClCompile Include="dstring.c" />
+    <ClCompile Include="dstring_test.c" />
     <ClCompile Include="lab1_2.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\dstring\dstring\dstring.h" />
+    <ClInclude Include="dstring.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
