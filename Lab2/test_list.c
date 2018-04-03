@@ -13,7 +13,7 @@ void menu(List head);
 void testFunction(List head);
 
 
-int main(void)
+int testlist_main(void)
 {
     List head = createEmptyList(); /*head ska hela tiden peka på borjan av din lista, om listan ar tom ska head peka pa NULL */
     
