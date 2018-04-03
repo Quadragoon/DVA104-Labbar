@@ -209,6 +209,7 @@ void clearList(List* list)
 	while (!isEmpty(*list))
 		removeFirst(list);
 
+	// Check that we've emptied the list successfully
 	assert(*list == NULL);
 }
 
@@ -218,7 +219,17 @@ void clearList(List* list)
   Den har typen av utskriftfunktion blir mer generell da man kan valja att skriva ut till skarmen eller till fil.*/
 void printList(const List list, FILE *textfile)
 {
-
+	if (isEmpty(list))
+		fprintf(textfile, "Empty list printed.");
+	else
+	{
+		struct node* nodeToPrint = list;
+		do
+		{
+			fprintf(textfile, "%d\n", nodeToPrint->data);
+			nodeToPrint = nodeToPrint->next;
+		} while (nodeToPrint != NULL);
+	}
 }
 
 /*Returnera forsta datat i listan
