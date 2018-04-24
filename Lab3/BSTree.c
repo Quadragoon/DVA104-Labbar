@@ -252,18 +252,6 @@ int depth(const BSTree tree)
 {
 	if (!isEmpty(tree))
 	{
-		int rightDepth = 0, leftDepth = 0;
-		if (!isEmpty(tree->left))
-			leftDepth = depth(tree->left) + 1;
-		if (!isEmpty(tree->right))
-			rightDepth = depth(tree->right) + 1;
-		return ((rightDepth > leftDepth) ? rightDepth : leftDepth);
-	}
-	else
-		return 0;
-
-	if (!isEmpty(tree))
-	{
 		int rightDepth = depth(tree->right) + 1;
 		int leftDepth = depth(tree->left) + 1;
 		return ((rightDepth > leftDepth) ? rightDepth : leftDepth);
@@ -280,8 +268,9 @@ int minDepth(const BSTree tree)
 		return 0;
 	else
 	{
-		double minDepth = log2(numberOfNodes(tree));
-		return (int)minDepth;
+		double minDepth = log2(numberOfNodes(tree) + 1);
+		
+		return (int)ceil(minDepth);
 	}
 }
 
