@@ -9,14 +9,14 @@ int isImplemented(SortingAlgorithm algorithm)
 {
 	switch (algorithm)
 	{
-        case BUBBLE_SORT:
-        case INSERTION_SORT:
-//      case SELECTION_SORT:
-        case QUICK_SORT:
-//      case MERGE_SORT:
-            return 1;
-        default:
-            return 0;
+	case BUBBLE_SORT:
+	case INSERTION_SORT:
+		//      case SELECTION_SORT:
+	case QUICK_SORT:
+		//      case MERGE_SORT:
+		return 1;
+	default:
+		return 0;
 	}
 }
 
@@ -25,11 +25,11 @@ int isImplemented(SortingAlgorithm algorithm)
    ett byte (vilket ger extra jamforelse) eller sa kan man anda gora ett byte (med sig sjalv).
    Foljer man de algoritmer som vi gatt igenom pa forelasningarna exakt sa gor man en swap
    aven pa ett element som ligger pa ratt plats
- 
-    Nar du analyserar det data som genereras (result.txt) sa behover du ha detta i atanke */
 
-/******************************************************************************************/
-/* Era algoritmer har: */
+	Nar du analyserar det data som genereras (result.txt) sa behover du ha detta i atanke */
+
+	/******************************************************************************************/
+	/* Era algoritmer har: */
 
 static void bubbleSort(ElementType* arrayToSort, unsigned int size, Statistics* statistics)
 {
@@ -57,20 +57,70 @@ static void mergeSort(ElementType* arrayToSort, unsigned int size, Statistics* s
 
 static int quickSort_partition(ElementType* arrayToSort, int lowBound, int highBound, Statistics* statistics)
 {
-	int pivot = arrayToSort[lowBound];
-	int lowIterator = lowBound - 1;
-	int highIterator = highBound + 1;
+	int pivot = arrayToSort[lowBound]; // select the first element of the array to sort as the pivot
+	int lowIterator = lowBound - 1; // set lowIterator one step before lowBound since we do +1 in the "do" loop
+	int highIterator = highBound + 1; // inverse of previous comment for highIterator
+
 	while (1)
 	{
-		do
+		do // check through from the "left" of the array until we find a value greater than or equal to the pivot
 			lowIterator += 1;
 		while (lessThan(arrayToSort[lowIterator], pivot, statistics));
-		do
+
+		do // check through from the "right" of the array until we find a value lower than or equal to the pivot
 			highIterator -= 1;
 		while (greaterThan(arrayToSort[highIterator], pivot, statistics));
 
+		// did the iterators pass each other? In that case, we've swapped all the low and high items (relative to the pivot)
+		// so we can return the index of the highIterator as the midpoint for splitting into further partitions
 		if (greaterThanOrEqualTo(lowIterator, highIterator, statistics))
 			return highIterator;
+
+		swapElements(&arrayToSort[lowIterator], &arrayToSort[highIterator], statistics);
+	}
+}
+
+static int quickSort_partition_v2(ElementType* arrayToSort, int lowBound, int highBound, Statistics* statistics)
+{
+	int pivot = arrayToSort[lowBound]; // select the first element of the array to sort as the pivot
+	int lowIterator = lowBound - 1; // set lowIterator one step before lowBound since we do +1 in the "do" loop
+	int highIterator = highBound + 1; // inverse of previous comment for highIterator
+	int pivotIndex;
+
+	do // check through from the "left" of the array until we find a value greater than or equal to the pivot
+		lowIterator += 1;
+	while (lessThan(arrayToSort[lowIterator], pivot, statistics));
+
+	do // check through from the "right" of the array until we find a value lower than or equal to the pivot
+		highIterator -= 1;
+	while (greaterThan(arrayToSort[highIterator], pivot, statistics));
+
+	// did the iterators pass each other? In that case, we've swapped all the low and high items (relative to the pivot)
+	// so we can return the index of the highIterator as the midpoint for splitting into further partitions
+	if (greaterThanOrEqualTo(lowIterator, highIterator, statistics))
+		return highIterator;
+
+	swapElements(&arrayToSort[lowIterator], &arrayToSort[highIterator], statistics);
+	pivotIndex = highIterator;
+
+	while (1)
+	{
+		do // check through from the "left" of the array until we find a value greater than or equal to the pivot
+			lowIterator += 1;
+		while (lessThan(arrayToSort[lowIterator], pivot, statistics));
+
+		do // check through from the "right" of the array until we find a value lower than or equal to the pivot
+			highIterator -= 1;
+		while (greaterThan(arrayToSort[highIterator], pivot, statistics));
+
+		// did the iterators pass each other? In that case, we've swapped all the low and high items (relative to the pivot)
+		// so we can return the index of the highIterator as the midpoint for splitting into further partitions
+		if (greaterThanOrEqualTo(lowIterator, highIterator, statistics))
+		{
+			if (notEqualTo(highIterator + 1, pivotIndex, statistics))
+				swapElements(&arrayToSort[highIterator + 1], &arrayToSort[pivotIndex], statistics);
+			return highIterator + 1;
+		}
 
 		swapElements(&arrayToSort[lowIterator], &arrayToSort[highIterator], statistics);
 	}
@@ -86,9 +136,23 @@ static void quickSort_sort(ElementType* arrayToSort, int lowBound, int highBound
 	}
 }
 
+static void quickSort_sort_v2(ElementType* arrayToSort, int lowBound, int highBound, Statistics* statistics)
+{
+	if (lessThan(lowBound, highBound, statistics))
+	{
+		int partitionBound = quickSort_partition_v2(arrayToSort, lowBound, highBound, statistics);
+		quickSort_sort_v2(arrayToSort, lowBound, partitionBound - 1, statistics);
+		quickSort_sort_v2(arrayToSort, partitionBound + 1, highBound, statistics);
+	}
+}
+
 static void quickSort(ElementType* arrayToSort, unsigned int size, Statistics* statistics)
 {
-	quickSort_sort(arrayToSort, 0, size - 1, statistics);
+	// version 2 does slightly more swaps.
+	// for 40 unsorted elements: 46 for v2, 44 for v1
+	// version 2 DOES, however, use significantly fewer comparisons.
+	// for 40 unsorted elements: 387 for v2,  531 for v1
+	quickSort_sort_v2(arrayToSort, 0, size - 1, statistics);
 }
 
 
@@ -101,19 +165,19 @@ char* getAlgorithmName(SortingAlgorithm algorithm)
 	   Nej, inte i detta fall. Strangkonstanter ar ett speciallfall i C */
 	switch (algorithm)
 	{
-        case BUBBLE_SORT:	 return "  Bubble sort ";
-        case SELECTION_SORT: return "Selection sort";
-        case INSERTION_SORT: return "Insertion sort";
-        case MERGE_SORT:	 return "  Merge sort  ";
-        case QUICK_SORT:	 return "  Quick sort  ";
-        default: assert(0 && "Ogiltig algoritm!"); return "";
+	case BUBBLE_SORT:	 return "  Bubble sort ";
+	case SELECTION_SORT: return "Selection sort";
+	case INSERTION_SORT: return "Insertion sort";
+	case MERGE_SORT:	 return "  Merge sort  ";
+	case QUICK_SORT:	 return "  Quick sort  ";
+	default: assert(0 && "Ogiltig algoritm!"); return "";
 	}
 }
 
 // Sorterar 'arrayToSort' med 'algorithmToUse'. Statistik for antal byten och jamforelser hamnar i *statistics
 static void sortArray(ElementType* arrayToSort, unsigned int size, SortingAlgorithm algorithmToUse, Statistics* statistics)
 {
-	if(statistics != NULL)
+	if (statistics != NULL)
 		resetStatistics(statistics);
 
 	switch (algorithmToUse)
@@ -156,7 +220,7 @@ static void sortArrays(SortingArray toBeSorted[])
 	{
 		SortingArray* current = &toBeSorted[i];
 		sortArray(current->arrayToSort, current->arraySize, current->algorithm, &current->statistics);
-	
+
 		if (!isSorted(current->arrayToSort, current->arraySize))
 		{
 			printf("Fel! Algoritmen %s har inte sorterat korrekt!\n", getAlgorithmName(current->algorithm));

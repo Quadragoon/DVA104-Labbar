@@ -62,11 +62,7 @@ static int* writeSortedToArray(const BSTree tree)
 	int i = 0;
 
 	if (sortedArray != NULL)
-	{
 		writeArraySegment(tree, sortedArray, 0);
-	}
-	else // if (sortedArray == NULL)
-		; // TODO:? memory allocation failed! oh no!
 
 	return sortedArray;
 }
@@ -138,8 +134,8 @@ void insertSorted(BSTree* tree, int data)
 		struct treeNode* nodeToInsert = createNode(data);
 		if (nodeToInsert != NULL)
 			*tree = nodeToInsert;
-		else // if (nodeToInsert == NULL)
-			; // TODO: error handling! something went wrong!
+		//  else if (nodeToInsert == NULL)
+		//		something went wrong!
 		return;
 	}
 
@@ -147,8 +143,8 @@ void insertSorted(BSTree* tree, int data)
 		insertSorted(&(nodeToCheck->left), data);
 	else if (data > nodeToCheck->data)
 		insertSorted(&(nodeToCheck->right), data);
-	else // if (data == nodeToCheckAt->data)
-		; // TODO: handle values already in tree
+	//  else if (data == nodeToCheckAt->data)
+	//		do nothing
 }
 
 /* Utskriftsfunktioner
@@ -235,6 +231,8 @@ void removeElement(BSTree* tree, int data)
 			nodeToRemove->data = successorData;
 		}
 	}
+	// else if (isEmpty(*nodeAddress)
+	//		do nothing;
 	
 }
 
@@ -289,10 +287,15 @@ void balanceTree(BSTree* tree)
 	   - djupet for tradet ar samma som minimumdjupet for tradet */
 
 	int* treeArray = writeSortedToArray(*tree);
-	int treeSize = numberOfNodes(*tree);
-	freeTree(tree);
-	buildTreeSortedFromArray(tree, treeArray, treeSize);
-	free(treeArray);
+	if (treeArray != NULL)
+	{
+		int treeSize = numberOfNodes(*tree);
+		freeTree(tree);
+		buildTreeSortedFromArray(tree, treeArray, treeSize);
+		free(treeArray);
+	}
+	// else
+	//		memory allocation failed. do nothing.
 }
 
 /* Tom tradet och frigor minnet for de olika noderna */

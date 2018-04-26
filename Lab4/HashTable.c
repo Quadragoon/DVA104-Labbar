@@ -12,7 +12,7 @@
 dvs ett index till arrayen som ar Hashtabellen */
 static int hash(Key key, int tablesize)
 {
-	return key % tablesize; // TODO: this is stupid but works
+	return key % tablesize;
 }
 
 /* Leta framat enligt principen oppen adressering
@@ -22,32 +22,41 @@ static int linearProbe(const HashTable* htable, Key key, unsigned int *col)
 	int indexToSearch = hash(key, htable->size);
 	int startIndex = indexToSearch;
 	*col = 0;
-	while (htable->table[indexToSearch].key != key && htable->table[indexToSearch].key != UNUSED)
+	if (htable != NULL)
 	{
-		*col += 1;
-		indexToSearch++;
-		if (indexToSearch >= htable->size)
-			indexToSearch = 0;
-		if (indexToSearch == startIndex)
-			break;
-	}
+		while (htable->table[indexToSearch].key != key && htable->table[indexToSearch].key != UNUSED)
+		{
+			*col += 1;
+			indexToSearch++;
+			if (indexToSearch >= htable->size)
+				indexToSearch = 0;
+			if (indexToSearch == startIndex)
+				break;
+		}
 
-	if (htable->table[indexToSearch].key != key && htable->table[indexToSearch].key != UNUSED)
-		return -1; // the lookup ended up going a full lap without finding the key or an empty space
-	else
-		return indexToSearch;
+		if (htable->table[indexToSearch].key != key && htable->table[indexToSearch].key != UNUSED)
+			return -1; // the lookup ended up going a full lap without finding the key or an empty space
+		else
+			return indexToSearch;
+	}
+	else // if (*htable == NULL)
+		return -1;
 }
 
 /*Allokera minne for hashtabellen*/
 HashTable createHashTable(unsigned int size)
 {
-	// TODO? does this even work? it seems to, but I'm not convinced
 	HashTable table;
 	table.table = malloc(sizeof(struct Bucket) * size);
-	table.size = size;
-	for (int i = 0; i < table.size; i++)
-		table.table[i].key = UNUSED;
-	return table;
+	if (table.table != NULL)
+	{
+		table.size = size;
+		for (int i = 0; i < table.size; i++)
+			table.table[i].key = UNUSED;
+		return table;
+	}
+	else // if (table.table == NULL)
+		return table;
 }
 
 /* Satter in paret {key,data} i Hashtabellen, om en nyckel redan finns ska vardet uppdateras */
@@ -55,75 +64,32 @@ HashTable createHashTable(unsigned int size)
 unsigned int insertElement(HashTable* htable, const Key key, const Value value)
 {
 	// Postcondition: det finns ett element for key i tabellen (anvand lookup() for att verifiera)
-	int collisions = 0;
-	int hashedIndex = linearProbe(htable, key, &collisions);
 
-	if (hashedIndex != -1)
+	if (htable != NULL)
 	{
-		if (htable->table[hashedIndex].key == key)
-			htable->table[hashedIndex].value = value;
-		else
-		{
-			htable->table[hashedIndex].key = key;
-			htable->table[hashedIndex].value = value;
-		}
-	}
+		int collisions = 0;
+		int hashedIndex = linearProbe(htable, key, &collisions);
 
-    return collisions; //Ersatt med ratt varde
+		if (hashedIndex != -1)
+		{
+			if (htable->table[hashedIndex].key == key)
+				htable->table[hashedIndex].value = value;
+			else
+			{
+				htable->table[hashedIndex].key = key;
+				htable->table[hashedIndex].value = value;
+			}
+		}
+
+		return collisions; //Ersatt med ratt varde
+	}
+	else
+		return 0;
 }
 
 /* Tar bort datat med nyckel "key" */
 void deleteElement(HashTable* htable, const Key key)
 {
-	/*
-	// Postcondition: inget element med key finns i tabellen (anvand loookup() for att verifiera)
-	int collisions = 0; // we don't care about collisions here but we still need the variable to send to the function
-	int hashedIndex = linearProbe(htable, key, &collisions);
-
-	if (hashedIndex != -1)
-	{
-		if (htable->table[hashedIndex].key != UNUSED)
-		{
-			for (int i = hashedIndex + 1; i != hashedIndex; i++)
-			{
-				if (i >= htable->size)
-					i = 0;
-
-				if (htable->table[i].key == UNUSED)
-					break;
-
-				if (hash(htable->table[i].key, htable->size) <= hashedIndex)
-				{
-					htable->table[hashedIndex].value = htable->table[i].value;
-					htable->table[hashedIndex].key = htable->table[i].key;
-					deleteElement(htable, htable->table[i].key);
-					break;
-				}
-			}
-
-			if (htable->table[hashedIndex].key == key)
-			{
-				htable->table[hashedIndex].key = UNUSED;
-				//htable->table[hashedIndex].value = NULL; //TODO: evaluate if this needs fixing
-			}
-		}
-	}*/
-
-    /*lookedUpIndex: = find_slot(key)
-	if slot[hashedIndex] is unoccupied
-		return   // key is not in the table
-		indexToCheck : = lookedUpIndex
-		loop
-		indexToCheck : = (indexToCheck + 1) modulo num_slots
-		if slot[indexToCheck] is unoccupied
-			exit loop
-			hashedIndex : = hash(slot[indexToCheck].key) modulo num_slots
-			if (indexToCheck > lookedUpIndex and (hashedIndex <= lookedUpIndex or hashedIndex > indexToCheck)) or
-				(indexToCheck < lookedUpIndex and (hashedIndex <= lookedUpIndex and hashedIndex > indexToCheck)) (note 2)
-				slot[lookedUpIndex] : = slot[indexToCheck]
-				lookedUpIndex : = indexToCheck
-				mark slot[lookedUpIndex] as unoccupied*/
-
 	int collisions = 0;
 	int targetKeyIndex = linearProbe(htable, key, &collisions);
 	if (targetKeyIndex == -1 || htable->table[targetKeyIndex].key == UNUSED)

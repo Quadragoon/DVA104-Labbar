@@ -41,9 +41,9 @@ Bakåtsorterat:
 ---------------------------------------------
 
 Osorterat: 
-  10 element:    65 jämförelser,     4 byten
-  20 element:   157 jämförelser,    21 byten
-  40 element:   387 jämförelser,    46 byten
+  10 element:    96 jämförelser,     4 byten
+  20 element:   199 jämförelser,    19 byten
+  40 element:   531 jämförelser,    44 byten
 
 Sorterat: 
   10 element:    91 jämförelser,     0 byten
@@ -51,7 +51,7 @@ Sorterat:
   40 element:   976 jämförelser,     0 byten
 
 Bakåtsorterat: 
-  10 element:   106 jämförelser,     5 byten
-  20 element:   316 jämförelser,    10 byten
-  40 element:  1036 jämförelser,    20 byten
+  10 element:   101 jämförelser,     5 byten
+  20 element:   306 jämförelser,    10 byten
+  40 element:  1016 jämförelser,    20 byten
 

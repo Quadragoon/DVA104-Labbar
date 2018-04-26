@@ -34,7 +34,7 @@ void dequeue(Queue* queue)
 Data peekQueue(const Queue queue)
 {
 	assert(!isEmpty(queue));
-    return queue->data;
+    return getFirstElement(queue);
 }
 
 

@@ -16,8 +16,8 @@ int main(void)
 {
 	BSTree tree = emptyTree();
 
-	testTree(tree);
-	//menuTree(tree);
+	//testTree(tree);
+	menuTree(tree);
 
 	return 0;
 }
