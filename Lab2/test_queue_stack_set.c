@@ -19,7 +19,7 @@ void testFunctionQueue();
 void testFunctionStack();
 void testFunctionSet();
 
-int testes_main(void)
+int test_main(void)
 {
 	testFunctionQueue();
 	testFunctionStack();
